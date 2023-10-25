@@ -56,3 +56,9 @@ class TestWords:
         assert freq["a"] == 6
         assert freq["b"] == 3
         assert freq["c"] == 2
+
+    def test_score(self):
+        guess = Word("abcde")
+        solution = Word("ecbdx")
+        score = guess.score(solution)
+        assert score == [0, 1, 1, 2, 1]

@@ -4,3 +4,17 @@ class Word:
 
     def __iter__(self):
         return iter(self.word)
+
+    def score(self, solution):
+        # word:  abcde
+        # sol:   ecbdx
+        # score: 01121
+        score = [0, 0, 0, 0, 0]
+        sol = solution.word
+        for i, c in enumerate(self.word):
+            if sol[i] == c:
+                score[i] = 2
+            elif c in sol:
+                score[i] = 1
+        return score
+
