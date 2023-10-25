@@ -15,7 +15,7 @@ class WordCollection:
     def from_file(cls, file_name):
         result = cls()
         with open(file_name, "r") as word_file:
-            lines = word_file.readlines()
+            lines = word_file.read().splitlines()
             for word in (Word(line) for line in lines):
                 result.append(Word(word))
         return result
@@ -79,6 +79,11 @@ class TestWords:
         wc = WordCollection.from_file("valid_solutions.txt")
         freq = wc.frequencies()
         assert freq["e"] == 1233
+        counts = [(c, freq[c]) for c in freq.keys()]
+        ordered = sorted(counts, key=lambda pair: pair[1], reverse=True)
+        for c, f in ordered:
+            print(f"{c:s}: {f:4d}")
+        # assert False
 
     def test_known_frequencies(self):
         wc = WordCollection()
