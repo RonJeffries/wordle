@@ -1,9 +1,13 @@
 class Word:
     def __init__(self, word):
+        assert isinstance(word, str)
         self.word = word
 
     def __iter__(self):
         return iter(self.word)
+
+    def __repr__(self):
+        return f"Word({self.word})"
 
     def score(self, solution):
         # word:  abcde

@@ -9,14 +9,18 @@ class WordCollection:
         result = cls()
         with open(file_name, "r") as word_file:
             lines = word_file.read().splitlines()
-            for word in (Word(line) for line in lines):
+            for word in lines:
                 result.append(Word(word))
         return result
 
     def __init__(self):
-            self.words = []
+        self.words = []
+
+    def __iter__(self):
+        return iter(self.words)
 
     def append(self, word):
+        assert isinstance(word, Word)
         self.words.append(word)
 
     def frequencies(self):
@@ -27,6 +31,12 @@ class WordCollection:
             for c in word.word:
                 freq[c] += 1
         return freq
+
+    def has_word(self, word):
+        for my_word in self.words:
+            if my_word.word == word.word:
+                return True
+        return False
 
     def __len__(self):
         return len(self.words)

@@ -50,6 +50,7 @@ class TestWords:
 
     def test_known_frequencies(self):
         wc = WordCollection()
+        assert isinstance(wc, WordCollection)
         for string in ["aaaabbb", "aacc"]:
             wc.append(Word(string))
         freq = wc.frequencies()
@@ -62,3 +63,19 @@ class TestWords:
         solution = Word("ecbdx")
         score = guess.score(solution)
         assert score == [0, 1, 1, 2, 1]
+
+    def test_has_word(self):
+        guess = Word("abate")
+        words = WordCollection()
+        words.append(Word("tabor"))
+        words.append(Word("abate"))
+        assert words.has_word(guess)
+        assert not words.has_word(Word("avast"))
+
+    def test_all_solutions_in_guesses(self):
+        sols = WordCollection.from_file("valid_solutions.txt")
+        guesses = WordCollection.from_file("valid_guesses.txt")
+        for solution_word in sols:
+            assert isinstance(solution_word, Word)
+            assert guesses.has_word(solution_word), f"guesses does not include {solution_word}"
+
