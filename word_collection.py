@@ -23,6 +23,9 @@ class WordCollection:
         assert isinstance(word, Word)
         self.words.append(word)
 
+    def append_unique(self, word_collection):
+        return set(self.words + word_collection.words)
+
     def frequencies(self):
         def default_value():
             return 0

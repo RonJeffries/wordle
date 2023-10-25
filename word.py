@@ -6,6 +6,12 @@ class Word:
     def __iter__(self):
         return iter(self.word)
 
+    def __eq__(self, other):
+        return self.word == other.word
+
+    def __hash__(self):
+        return hash(self.word)
+
     def __repr__(self):
         return f"Word({self.word})"
 

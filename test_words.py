@@ -48,6 +48,16 @@ class TestWords:
             print(f"{c:s}: {f:4d}")
         # assert False
 
+    def test_words_from_big_file(self):
+        wc = WordCollection.from_file("valid_guesses.txt")
+        freq = wc.frequencies()
+        assert freq["e"] == 5429
+        counts = [(c, freq[c]) for c in freq.keys()]
+        ordered = sorted(counts, key=lambda pair: pair[1], reverse=True)
+        for c, f in ordered:
+            print(f"{c:s}: {f:4d}")
+        # assert False
+
     def test_known_frequencies(self):
         wc = WordCollection()
         assert isinstance(wc, WordCollection)
@@ -72,10 +82,15 @@ class TestWords:
         assert words.has_word(guess)
         assert not words.has_word(Word("avast"))
 
-    def test_all_solutions_in_guesses(self):
+    def test_no_solutions_in_guesses(self):
         sols = WordCollection.from_file("valid_solutions.txt")
         guesses = WordCollection.from_file("valid_guesses.txt")
         for solution_word in sols:
-            assert isinstance(solution_word, Word)
-            assert guesses.has_word(solution_word), f"guesses does not include {solution_word}"
+            assert not guesses.has_word(solution_word), f"guesses includes {solution_word}"
+
+    def test_append_unique(self):
+        sols = WordCollection.from_file("valid_solutions.txt")
+        guesses = WordCollection.from_file("valid_guesses.txt")
+        combined = sols.append_unique(guesses)
+        assert len(combined) == len(sols) + len(guesses)
 
