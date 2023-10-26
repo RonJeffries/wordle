@@ -13,8 +13,11 @@ class WordCollection:
                 result.append(Word(word))
         return result
 
-    def __init__(self):
-        self.words = []
+    def __init__(self, words=None):
+        if words:
+            self.words = words
+        else:
+            self.words = []
 
     def __iter__(self):
         return iter(self.words)
