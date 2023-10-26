@@ -22,3 +22,12 @@ class TestCollectionManipulation:
         limited_words = coll.eliminate(to_eliminate)
         assert len(limited_words) == 2
 
+    def test_big_elimination(self):
+        combined = WordCollection.from_file("valid_combined.txt")
+        solution = Word("aback")
+        guess = Word("abbas")
+        score = guess.score(solution)
+        assert score == [2, 2, 0, 1, 0]
+        to_eliminate = guess.to_eliminate(score)
+        assert to_eliminate == "s"
+

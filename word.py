@@ -38,9 +38,13 @@ class Word:
         return score
 
     def to_eliminate(self, score):
-        result = ""
+        keep = ""
         for i, s in enumerate(score):
-            if not s:
-                result += self.word[i]
+            if s:
+                keep += self.word[i]
+        result = ""
+        for c in self.word:
+            if c not in keep:
+                result += c
         return result
 
