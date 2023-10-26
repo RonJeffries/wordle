@@ -21,7 +21,7 @@ class Word:
 
     def contains_none(self, string):
         word = self.word
-        return all((c not in word for c in string))
+        return not any((c in word for c in string))
 
     def score(self, solution):
         # word:     abcde
