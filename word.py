@@ -20,11 +20,13 @@ class Word:
         # sol:   ecbdx
         # score: 01121
         score = [0, 0, 0, 0, 0]
-        sol = solution.word
+        sol = list(solution.word)
         for i, c in enumerate(self.word):
             if sol[i] == c:
                 score[i] = 2
+                sol[i] = 0
             elif c in sol:
                 score[i] = 1
+                sol[sol.index(c)] = 0
         return score
 

@@ -94,3 +94,22 @@ class TestWords:
         combined = sols.append_unique(guesses)
         assert len(combined) == len(sols) + len(guesses)
 
+    def test_strict_score(self):
+        g = Word("aaxxx")
+        s = Word("abcde")
+        score = g.score(s)
+        assert score == [2, 0, 0, 0, 0]
+
+    def test_strict_score_2(self):
+        g = Word("aaxxx")
+        s = Word("zzzza")
+        score = g.score(s)
+        assert score == [1, 0, 0, 0, 0]
+
+    def test_exact_after_removal(self):
+        g = Word("azczx")
+        s = Word("axcxq")
+        score = g.score(s)
+        assert score == [2, 0, 2, 0, 1]
+
+
