@@ -1,3 +1,5 @@
+import sys
+
 from word import Word
 from word_collection import WordCollection
 
@@ -20,6 +22,14 @@ class TestWords:
         with open("valid_combined.txt", "r") as combined:
             lines = combined.readlines()
             assert len(lines) == 10657 + 2315
+
+    def test_size(self):
+        combo = WordCollection.from_file("valid_combined.txt")
+        size = sys.getsizeof(combo)
+        assert size < 100
+        words = combo.words
+        words_size = sys.getsizeof(words)
+        assert words_size < 120000
 
     def test_word_class_exists(self):
         word = Word("abate")
@@ -49,8 +59,8 @@ class TestWords:
         assert freq["e"] == 1233
         counts = [(c, freq[c]) for c in freq.keys()]
         ordered = sorted(counts, key=lambda pair: pair[1], reverse=True)
-        for c, f in ordered:
-            print(f"{c:s}: {f:4d}")
+        # for c, f in ordered:
+            # print(f"{c:s}: {f:4d}")
         # assert False
 
     def test_words_from_big_file(self):
@@ -59,8 +69,8 @@ class TestWords:
         assert freq["e"] == 5429
         counts = [(c, freq[c]) for c in freq.keys()]
         ordered = sorted(counts, key=lambda pair: pair[1], reverse=True)
-        for c, f in ordered:
-            print(f"{c:s}: {f:4d}")
+        # for c, f in ordered:
+            # print(f"{c:s}: {f:4d}")
         # assert False
 
     def test_known_frequencies(self):

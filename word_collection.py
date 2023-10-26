@@ -48,5 +48,8 @@ class WordCollection:
                 return True
         return False
 
+    def trim(self, count):
+        self.words = self.words[0:count]
+
     def __len__(self):
         return len(self.words)
