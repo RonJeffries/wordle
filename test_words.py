@@ -78,6 +78,18 @@ class TestWords:
         solution = Word("ecbdx")
         score = guess.score(solution)
         assert score == [0, 1, 1, 2, 1]
+        score_again = guess.score(solution)
+        assert score_again == [0, 1, 1, 2, 1]
+
+    def test_score_caching(self):
+        guess = Word("abcde")
+        solution = Word("ecbdx")
+        score_1 = guess.score(solution)
+        assert score_1 == [0, 1, 1, 2, 1]
+        score_2 = guess.score(solution)
+        assert score_1 == [0, 1, 1, 2, 1], "fails, cached?"
+        assert score_2 == [0, 1, 1, 2, 1]
+        # assert score_1 == score_2, "cannot cache solution list"
 
     def test_has_word(self):
         guess = Word("abate")

@@ -1,3 +1,5 @@
+import sys
+
 from word import Word
 from word_collection import WordCollection
 
@@ -35,4 +37,28 @@ class TestCollectionManipulation:
         check = Word("sssss")
         for word in remaining.words:
             assert word.score(check) == [0, 0, 0, 0, 0]
+    #
+    # def test_massive(self):
+    #     combined = WordCollection.from_file("valid_combined.txt")
+    #     solutions = WordCollection.from_file("valid_solutions.txt")
+    #     scores = {}
+    #     for word in combined.words:
+    #         scores[word.word] = 0
+    #         for soln in solutions. words:
+    #             score = word.score(soln)
+    #             elim = word.to_eliminate(score)
+    #             retained = combined.eliminate(elim)
+    #             scores[word.word] += len(retained)
+
+    def test_list(self):
+        spread = list("abcde")
+        assert spread == ["a", "b", "c", "d", "e"]
+
+    def test_list_size(self):
+        s0 = sys.getsizeof([])
+        assert s0 == 56
+        s1 = sys.getsizeof(["a"])
+        assert s1 == 64
+        s5 = sys.getsizeof(["a", "b", "c", "d", "e"])
+        assert s5 == 104
 
