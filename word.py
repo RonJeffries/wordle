@@ -15,6 +15,13 @@ class Word:
     def __repr__(self):
         return f"Word({self.word})"
 
+    def contains_none(self, string):
+        my_string = self.word
+        for c in string:
+            if c in my_string:
+                return False
+        return True
+
     def score(self, solution):
         # word:  abcde
         # sol:   ecbdx
@@ -29,4 +36,11 @@ class Word:
                 score[i] = 1
                 sol[sol.index(c)] = 0
         return score
+
+    def to_eliminate(self, score):
+        result = ""
+        for i, s in enumerate(score):
+            if not s:
+                result += self.word[i]
+        return result
 

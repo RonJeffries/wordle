@@ -29,6 +29,10 @@ class WordCollection:
     def append_unique(self, word_collection):
         return set(self.words + word_collection.words)
 
+    def eliminate(self, string):
+        new_words = [word for word in self.words if word.contains_none(string)]
+        return WordCollection(new_words)
+
     def frequencies(self):
         def default_value():
             return 0
