@@ -30,4 +30,9 @@ class TestCollectionManipulation:
         assert score == [2, 2, 0, 1, 0]
         to_eliminate = guess.to_eliminate(score)
         assert to_eliminate == "s"
+        remaining = combined.eliminate(to_eliminate)
+        assert len(remaining) == 7036
+        check = Word("sssss")
+        for word in remaining.words:
+            assert word.score(check) == [0, 0, 0, 0, 0]
 
