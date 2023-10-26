@@ -16,6 +16,11 @@ class TestWords:
             lines = solutions.readlines()
         assert len(lines) == 2315
 
+    def test_reading_combined(self):
+        with open("valid_combined.txt", "r") as combined:
+            lines = combined.readlines()
+            assert len(lines) == 10657 + 2315
+
     def test_word_class_exists(self):
         word = Word("abate")
 
