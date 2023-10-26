@@ -1,3 +1,5 @@
+
+
 class Word:
     def __init__(self, word):
         assert isinstance(word, str)
@@ -22,19 +24,19 @@ class Word:
         return all((c not in word for c in string))
 
     def score(self, solution):
-        # word:  abcde
-        # sol:   ecbdx
-        # score: 01121
+        # word:     abcde
+        # solution: ecbdx
+        # score:    01121
         score = self._optimize_score
-        sol = list(solution.word)  # cannot cache this, we destroy it
+        available_letters = list(solution.word)  # cannot cache this, we destroy it
         for i, c in enumerate(self.word):
-            if c in sol:
-                if sol[i] == c:
+            if c in available_letters:
+                if available_letters[i] == c:
                     score[i] = 2
-                    sol[i] = 0
+                    available_letters[i] = 0
                 else:
                     score[i] = 1
-                    sol[sol.index(c)] = 0
+                    available_letters[available_letters.index(c)] = 0
             else:
                 score[i] = 0
         return score
