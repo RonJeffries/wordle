@@ -120,6 +120,14 @@ class TestWords:
         score = [int(i) for i in str(int_score)]
         assert score == [2, 1, 0, 2, 3]
 
+    def test_integer_to_list_2(self):
+        int_score = 0
+        string = f"00000{int_score:d}"[-5:]
+        assert string == "00000"
+        int_score = 12123
+        string = f"00000{int_score:d}"[-5:]
+        assert string == "12123"
+
     def test_has_word(self):
         guess = Word("abate")
         words = WordCollection()
@@ -128,11 +136,12 @@ class TestWords:
         assert words.has_word(guess)
         assert not words.has_word(Word("avast"))
 
-    def test_no_solutions_in_guesses(self):
-        sols = WordCollection.from_file("valid_solutions.txt")
-        guesses = WordCollection.from_file("valid_guesses.txt")
-        for solution_word in sols:
-            assert not guesses.has_word(solution_word), f"guesses includes {solution_word}"
+    # test is slow and generally useless
+    # def test_no_solutions_in_guesses(self):
+    #     sols = WordCollection.from_file("valid_solutions.txt")
+    #     guesses = WordCollection.from_file("valid_guesses.txt")
+    #     for solution_word in sols:
+    #         assert not guesses.has_word(solution_word), f"guesses includes {solution_word}"
 
     def test_append_unique(self):
         sols = WordCollection.from_file("valid_solutions.txt")

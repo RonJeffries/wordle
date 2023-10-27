@@ -17,7 +17,7 @@ class TestCollectionManipulation:
         guess = Word("abcde")
         soln = Word("dayyy")
         score = guess.score(soln)
-        assert score == [1, 0, 0, 1, 0]
+        assert score == 10010
         strings = "abcde fghij ageij fghid".split(" ")
         words = [Word(s) for s in strings]
         coll = WordCollection(words)
@@ -31,14 +31,14 @@ class TestCollectionManipulation:
         solution = Word("aback")
         guess = Word("abbas")
         score = guess.score(solution)
-        assert score == [2, 2, 0, 1, 0]
+        assert score == 22010
         to_eliminate = guess.to_eliminate(score)
         assert to_eliminate == "s"
         remaining = combined.eliminate(to_eliminate)
         assert len(remaining) == 7036
         check = Word("sssss")
         for word in remaining.words:
-            assert word.score(check) == [0, 0, 0, 0, 0]
+            assert word.score(check) == 0
 
     # @pytest.mark.timeout(300)
     # def test_massive(self):

@@ -43,8 +43,9 @@ class Word:
 
     def to_eliminate(self, score):
         keep = ""
-        for i, s in enumerate(score):
-            if s:
+        string = f"00000{score:d}"[-5:]
+        for i, s in enumerate(string):
+            if s != "0":
                 keep += self.word[i]
         result = ""
         for c in self.word:
