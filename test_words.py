@@ -1,4 +1,5 @@
 import sys
+import time
 from functools import reduce
 
 from word import Word
@@ -114,11 +115,12 @@ class TestWords:
         int_score = reduce(lambda product, factor: 10*product+factor, score)
         assert int_score == 21023
 
-    def test_integer_to_list_score(self):
-        int_score = 21023
-        assert str(int_score) == "21023"
-        score = [int(i) for i in str(int_score)]
-        assert score == [2, 1, 0, 2, 3]
+    # def test_integer_to_list_score(self):
+    #     # does not work for score 1023
+    #     int_score = 21023
+    #     assert str(int_score) == "21023"
+    #     score = [int(i) for i in str(int_score)]
+    #     assert score == [2, 1, 0, 2, 3]
 
     def test_integer_to_list_2(self):
         int_score = 0
@@ -166,5 +168,37 @@ class TestWords:
         s = Word("axcxq")
         score = g.score(s)
         assert score == 20201
+
+    def test_leading_zero(self):
+        n = 0
+        assert f"{n:05}" == "00000"
+        n = 123
+        assert f"{n:05}" == "00123"
+        n = 20123
+        assert f"{n:05}" == "20123"
+
+    def test_in_speed(self):
+        n = 10000000
+        r0 = time.time()
+        for i in range(n):
+            pass
+        r1 = time.time()
+        raw = r1 - r0
+        string_time_0 = time.time()
+        for i in range(n):
+            t = "z" in "abc"
+        string_time_1 = time.time()
+        string_time = string_time_1 - string_time_0 - raw
+        list_time_0 = time.time()
+        for i in range(n):
+            t = "z" in ["a", "b", "c"]
+        list_time_1 = time.time()
+        list_time = list_time_1 - list_time_0 - raw
+        assert string_time*3 < list_time
+
+    def test_to_eliminate(self):
+        word = Word("abcde")
+        score = 1020
+        assert word.to_eliminate(score) == "ace"
 
 

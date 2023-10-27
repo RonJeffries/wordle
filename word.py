@@ -41,15 +41,8 @@ class Word:
                 score = 10*score
         return score
 
-    def to_eliminate(self, score):
-        keep = ""
-        string = f"00000{score:d}"[-5:]
-        for i, s in enumerate(string):
-            if s != "0":
-                keep += self.word[i]
-        result = ""
-        for c in self.word:
-            if c not in keep:
-                result += c
-        return result
+    def to_eliminate(self, score: int):
+        score_with_leading_zeros = f"{score:05}"
+        keep = [c for c, s in zip(self.word, score_with_leading_zeros) if s != "0"]
+        return "".join([c for c in self.word if c not in keep])
 
