@@ -88,18 +88,18 @@ class TestWords:
         guess = Word("abcde")
         solution = Word("ecbdx")
         score = guess.score(solution)
-        assert score == [0, 1, 1, 2, 1]
+        assert score == 1121
         score_again = guess.score(solution)
-        assert score_again == [0, 1, 1, 2, 1]
+        assert score_again == 1121
 
     def test_score_caching(self):
         guess = Word("abcde")
         solution = Word("ecbdx")
         score_1 = guess.score(solution)
-        assert score_1 == [0, 1, 1, 2, 1]
+        assert score_1 == 1121
         score_2 = guess.score(solution)
-        assert score_1 == [0, 1, 1, 2, 1], "fails, cached?"
-        assert score_2 == [0, 1, 1, 2, 1]
+        assert score_1 == 1121, "fails, cached?"
+        assert score_2 == 1121
         # assert score_1 == score_2, "cannot cache solution list"
 
     def test_list_score_to_integer(self):
@@ -144,18 +144,18 @@ class TestWords:
         g = Word("aaxxx")
         s = Word("abcde")
         score = g.score(s)
-        assert score == [2, 0, 0, 0, 0]
+        assert score == 20000
 
     def test_strict_score_2(self):
         g = Word("aaxxx")
         s = Word("zzzza")
         score = g.score(s)
-        assert score == [1, 0, 0, 0, 0]
+        assert score == 10000
 
     def test_exact_after_removal(self):
         g = Word("azczx")
         s = Word("axcxq")
         score = g.score(s)
-        assert score == [2, 0, 2, 0, 1]
+        assert score == 20201
 
 

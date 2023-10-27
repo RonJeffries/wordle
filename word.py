@@ -27,18 +27,18 @@ class Word:
         # word:     abcde
         # solution: ecbdx
         # score:    01121
-        score = self._optimize_score
+        score = 0
         available_letters = list(solution.word)  # cannot cache this, we destroy it
         for i, c in enumerate(self.word):
             if c in available_letters:
                 if available_letters[i] == c:
-                    score[i] = 2
+                    score = 10*score + 2
                     available_letters[i] = 0
                 else:
-                    score[i] = 1
+                    score = 10*score + 1
                     available_letters[available_letters.index(c)] = 0
             else:
-                score[i] = 0
+                score = 10*score
         return score
 
     def to_eliminate(self, score):
