@@ -1,4 +1,5 @@
 import sys
+from functools import reduce
 
 from word import Word
 from word_collection import WordCollection
@@ -23,7 +24,7 @@ class TestWords:
             lines = combined.readlines()
             assert len(lines) == 10657 + 2315
 
-    def test_size(self):
+    def test_memory_size(self):
         combo = WordCollection.from_file("valid_combined.txt")
         size = sys.getsizeof(combo)
         assert size < 100
@@ -100,6 +101,24 @@ class TestWords:
         assert score_1 == [0, 1, 1, 2, 1], "fails, cached?"
         assert score_2 == [0, 1, 1, 2, 1]
         # assert score_1 == score_2, "cannot cache solution list"
+
+    def test_list_score_to_integer(self):
+        score = [2, 1, 0, 2, 3]
+        int_score = 0
+        for s in score:
+            int_score = 10*int_score + s
+        assert int_score == 21023
+
+    def test_list_score_to_int_reduce(self):
+        score = [2, 1, 0, 2, 3]
+        int_score = reduce(lambda product, factor: 10*product+factor, score)
+        assert int_score == 21023
+
+    def test_integer_to_list_score(self):
+        int_score = 21023
+        assert str(int_score) == "21023"
+        score = [int(i) for i in str(int_score)]
+        assert score == [2, 1, 0, 2, 3]
 
     def test_has_word(self):
         guess = Word("abate")

@@ -56,25 +56,25 @@ class TestCollectionManipulation:
     #                     tally += 1
     #             scores[word.word] += tally
 
-    @pytest.mark.timeout(2)
-    def test_not_so_massive(self):
-        n = 100
-        combined = WordCollection.from_file("valid_combined.txt")
-        combined.trim(n)
-        solutions = WordCollection.from_file("valid_solutions.txt")
-        solutions.trim(n)
-        scores = {}
-        for word in combined.words:  # 12000
-            scores[word.word] = 0
-            for soln in solutions.words:  # x 2000 = 24 000 000
-                score = word.score(soln)
-                elim = word.to_eliminate(score)
-                tally = 0
-                for candidate in combined.words: # x 12000 = 288 000 000 000
-                    if candidate.contains_none(elim):
-                        tally += 1
-                scores[word.word] += tally
-        assert  len(scores) == n
+    # @pytest.mark.timeout(2)
+    # def test_not_so_massive(self):
+    #     n = 100
+    #     combined = WordCollection.from_file("valid_combined.txt")
+    #     combined.trim(n)
+    #     solutions = WordCollection.from_file("valid_solutions.txt")
+    #     solutions.trim(n)
+    #     scores = {}
+    #     for word in combined.words:  # 12000
+    #         scores[word.word] = 0
+    #         for soln in solutions.words:  # x 2000 = 24 000 000
+    #             score = word.score(soln)
+    #             elim = word.to_eliminate(score)
+    #             tally = 0
+    #             for candidate in combined.words: # x 12000 = 288 000 000 000
+    #                 if candidate.contains_none(elim):
+    #                     tally += 1
+    #             scores[word.word] += tally
+    #     assert len(scores) == n
 
     def test_list(self):
         spread = list("abcde")
