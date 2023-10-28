@@ -43,39 +43,20 @@ class Word:
         # return reduce(lambda product, factor: 10 * product + factor, answer)
 
     def score1(self, solution):
+        answer = [0, 0, 0, 0, 0]
         guess = self.word
         soln = solution.word
-        # print(f"\n{guess}\n{soln}")
         available_letters = list(soln)  # cannot cache this, we destroy it
-        xor = self.packed ^ solution.packed
-        mask = 0xFF
-        score = 0
         for i in range(5):
-            if not (xor & mask):
-                score = score | (0x0202020202 & mask)
+            if guess[i] == soln[i]:
+                answer[i] = 2
                 available_letters[i] = 0
-            mask = mask << 8
-        mask = 0xFF
         for i in range(5):
-            # print(i, 4-i, guess)
-            w = guess[4-i]
-            # print(f"considering i {i}: {w} xor {xor:010x} mask {mask:010x} = {xor&mask:010x}")
-            if xor & mask:
-                if w in available_letters:
-                    # print("present")
-                    score = score | (0x0101010101 & mask)
+            if answer[i] != 2:
+                if (w := guess[i]) in available_letters:
+                    answer[i] = 1
                     available_letters[available_letters.index(w)] = 0
-                else:
-                    # print("not present")
-                    pass
-            else:
-                # print("masked")
-                pass
-            mask = mask << 8
-        # print(f"score {score:010x}")
-        return 2002
-        # return answer[4] + 10*(answer[3] + 10*(answer[2] + 10*(answer[1] + 10*answer[0])))
-        # return answer[4] + 10*(answer[3] + 10*(answer[2] + 10*(answer[1] + 10*answer[0])))
+        return answer[4] + 10*(answer[3] + 10*(answer[2] + 10*(answer[1] + 10*answer[0])))
         # return reduce(lambda product, factor: 10 * product + factor, answer)
 
     def to_eliminate(self, score: int):
