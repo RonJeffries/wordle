@@ -1,4 +1,3 @@
-from functools import reduce
 
 
 class Word:
@@ -44,7 +43,6 @@ class Word:
         # return reduce(lambda product, factor: 10 * product + factor, answer)
 
     def score1(self, solution):
-        answer = [0, 0, 0, 0, 0]
         guess = self.word
         soln = solution.word
         # print(f"\n{guess}\n{soln}")
