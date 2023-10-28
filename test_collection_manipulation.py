@@ -41,20 +41,27 @@ class TestCollectionManipulation:
             assert word.score(check) == 0
 
     # @pytest.mark.timeout(300)
+    # @pytest.mark.skip("slow")
     # def test_massive(self):
+    #     # processed 185 words in 300 seconds.
+    #     # about 185*2000*2000 = 740 000 000 iterations
+    #     count = 0
     #     combined = WordCollection.from_file("valid_combined.txt")
     #     solutions = WordCollection.from_file("valid_solutions.txt")
     #     scores = {}
     #     for word in combined.words:
+    #         count += 1
+    #         print(count)
     #         scores[word.word] = 0
-    #         for soln in solutions. words:
+    #         for soln in solutions.words:
     #             score = word.score(soln)
     #             elim = word.to_eliminate(score)
     #             tally = 0
-    #             for candidate in combined.words:
+    #             for candidate in solutions.words:
     #                 if candidate.contains_none(elim):
     #                     tally += 1
     #             scores[word.word] += tally
+    #     assert not scores
 
     # @pytest.mark.timeout(2)
     # def test_not_so_massive(self):

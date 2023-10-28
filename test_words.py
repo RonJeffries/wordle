@@ -2,6 +2,8 @@ import sys
 import time
 from functools import reduce
 
+import pytest
+
 from word import Word
 from word_collection import WordCollection
 
@@ -23,7 +25,7 @@ class TestWords:
     def test_reading_combined(self):
         with open("valid_combined.txt", "r") as combined:
             lines = combined.readlines()
-            assert len(lines) == 10657 + 2315
+            assert len(lines) == 10657 + 2315  # 12972
 
     def test_memory_size(self):
         combo = WordCollection.from_file("valid_combined.txt")
@@ -103,6 +105,24 @@ class TestWords:
         assert score_2 == 1121
         # assert score_1 == score_2, "cannot cache solution list"
 
+    def test_score_more(self):
+        guess = Word("xaxax")
+        solution = Word("ayyay")
+        score = guess.score(solution)
+        assert score == 1020
+
+    def test_score_even_more(self):
+        guess = Word("xaxax")
+        solution = Word("yaayy")
+        score = guess.score(solution)
+        assert score == 2010
+
+    def test_score_even_worse(self):
+        guess = Word("xaxax")
+        solution = Word("yyyaa")
+        score = guess.score(solution)
+        assert score == 1020
+
     def test_list_score_to_integer(self):
         score = [2, 1, 0, 2, 3]
         int_score = 0
@@ -177,28 +197,98 @@ class TestWords:
         n = 20123
         assert f"{n:05}" == "20123"
 
-    def test_in_speed(self):
-        n = 10000000
-        r0 = time.time()
-        for i in range(n):
-            pass
-        r1 = time.time()
-        raw = r1 - r0
-        string_time_0 = time.time()
-        for i in range(n):
-            t = "z" in "abc"
-        string_time_1 = time.time()
-        string_time = string_time_1 - string_time_0 - raw
-        list_time_0 = time.time()
-        for i in range(n):
-            t = "z" in ["a", "b", "c"]
-        list_time_1 = time.time()
-        list_time = list_time_1 - list_time_0 - raw
-        assert string_time*3 < list_time
+    # @pytest.mark.skip("abc faster than list")
+    # def test_in_speed(self):
+    #     n = 10000000
+    #     r0 = time.time()
+    #     for i in range(n):
+    #         pass
+    #     r1 = time.time()
+    #     raw = r1 - r0
+    #     string_time_0 = time.time()
+    #     for i in range(n):
+    #         t = "z" in "abc"
+    #     string_time_1 = time.time()
+    #     string_time = string_time_1 - string_time_0 - raw
+    #     list_time_0 = time.time()
+    #     for i in range(n):
+    #         t = "z" in ["a", "b", "c"]
+    #     list_time_1 = time.time()
+    #     list_time = list_time_1 - list_time_0 - raw
+    #     assert string_time*3 < list_time
 
     def test_to_eliminate(self):
         word = Word("abcde")
         score = 1020
         assert word.to_eliminate(score) == "ace"
+
+    # @pytest.mark.skip("about 30 seconds to run")
+    # def test_combined_x_solutions(self):
+    #     sols = WordCollection.from_file("valid_solutions.txt")
+    #     guesses = WordCollection.from_file("valid_guesses.txt")
+    #     t0 = time.time()
+    #     guess_count = 0
+    #     sol_count = 0
+    #     for guess in guesses.words:
+    #         guess_count += 1
+    #         for sol in sols.words:
+    #             score = guess.score(sol)
+    #             sol_count += 1
+    #     t1 = time.time()
+    #     print(t1 - t0)
+    #     assert guess_count == len(guesses)
+    #     assert sol_count == len(guesses) * len(sols)
+    #     assert False
+
+    # @pytest.mark.skip("about 0.4 seconds to run")
+    # def test_nested_loops(self):
+    #     sols = WordCollection.from_file("valid_solutions.txt")
+    #     guesses = WordCollection.from_file("valid_guesses.txt")
+    #     t0 = time.time()
+    #     guess_count = 0
+    #     sol_count = 0
+    #     for guess in guesses.words:
+    #         guess_count += 1
+    #         for sol in sols.words:
+    #             sol_count += 1
+    #     t1 = time.time()
+    #     assert guess_count == len(guesses)
+    #     assert sol_count == len(guesses) * len(sols)
+    #     assert t1 - t0 < 0.5
+
+    # @pytest.mark.skip("about 1.2 seconds per million")
+    # def test_score_speed(self):
+    #     w1 = Word("abcde")
+    #     w2 = Word("edcba")
+    #     assert w1.score(w2) == 11211
+    #     n = 1000000
+    #     t0 = time.time()
+    #     for i in range(n):
+    #         t = w1.score(w2)
+    #     t1 = time.time()
+    #     assert t1 - t0 < 1.5
+
+    def test_compare_score(self):
+        sols = WordCollection.from_file("valid_solutions.txt")
+        guesses = WordCollection.from_file("valid_guesses.txt")
+        guess = Word("crate")
+        solution = Word("prone")
+        assert guess.score(solution) == guess.score1(solution)
+        n = 100000
+        loop_0 = time.time()
+        for i in range(n):
+            pass
+        loop_delta = time.time() - loop_0
+        current_0 = time.time()
+        for i in range(n):
+            sc = guess.score(solution)
+        current_delta = round(time.time() - current_0 - loop_delta, 3)
+        new_0 = time.time()
+        for i in range(n):
+            sc = guess.score1(solution)
+        new_delta = round(time.time() - new_0 - loop_delta, 3)
+        print(current_delta, new_delta)
+        print(f"\nscore1 {new_delta}, score {current_delta} = {current_delta / new_delta:.3f}")
+        assert False
 
 

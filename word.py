@@ -1,3 +1,4 @@
+from functools import reduce
 
 
 class Word:
@@ -27,19 +28,35 @@ class Word:
         # word:     abcde
         # solution: ecbdx
         # score:    01121
-        score = 0
+        answer = [0, 0, 0,0, 0]
         available_letters = list(solution.word)  # cannot cache this, we destroy it
-        for i, c in enumerate(self.word):
-            if c in available_letters:
-                if available_letters[i] == c:
-                    score = 10*score + 2
-                    available_letters[i] = 0
-                else:
-                    score = 10*score + 1
-                    available_letters[available_letters.index(c)] = 0
-            else:
-                score = 10*score
-        return score
+        for i, w, s in zip(range(5), self.word, solution.word):
+            if w == s:
+                answer[i] = 2
+                available_letters[i] = 0
+        for i, w in zip(range(5), self.word):
+            if answer[i] != 2:
+                if w in available_letters:
+                    answer[i] = 1
+                    available_letters[available_letters.index(w)] = 0
+        return reduce(lambda product, factor: 10 * product + factor, answer)
+
+    def score1(self, solution):
+        answer = [0, 0, 0,0, 0]
+        available_letters = list(solution.word)  # cannot cache this, we destroy it
+        for i in range(5):
+        # for i, w, s in zip(range(5), self.word, solution.word):
+            if self.word[i] == solution.word[i]:
+                answer[i] = 2
+                available_letters[i] = 0
+        for i in range(5):
+        # for i, w in zip(range(5), self.word):
+            if answer[i] != 2:
+                if (w := self.word[i]) in available_letters:
+                    answer[i] = 1
+                    available_letters[available_letters.index(w)] = 0
+        return answer[4] + 10*(answer[3] + 10*(answer[2] + 10*(answer[1] + 10*answer[0])))
+        # return reduce(lambda product, factor: 10 * product + factor, answer)
 
     def to_eliminate(self, score: int):
         score_with_leading_zeros = f"{score:05}"
