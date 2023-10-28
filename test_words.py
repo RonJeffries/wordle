@@ -273,7 +273,7 @@ class TestWords:
         guesses = WordCollection.from_file("valid_guesses.txt")
         guess = Word("crate")
         solution = Word("prone")
-        assert guess.score(solution) == guess.score1(solution)
+        assert guess.score1(solution) == guess.score(solution)
         n = 100000
         loop_0 = time.time()
         for i in range(n):
@@ -288,12 +288,19 @@ class TestWords:
             sc = guess.score1(solution)
         new_delta = round(time.time() - new_0 - loop_delta, 3)
         print(current_delta, new_delta)
-        print(f"\nscore1 {new_delta}, score {current_delta} = {current_delta / new_delta:.3f}")
+        print(f"\nscore1 {new_delta:.3f}, score {current_delta:.3f} = {current_delta / new_delta:.3f}")
         assert False
 
-    def test_five_bit_code(self):
-        print(f"{(0x1F << 20):x}")
+    def test_encode_decode(self):
+        # for i in range(5):
+        #     print(f"{(0x1F << (5*i)):x}")
         assert Word.decode(Word.encode("zebra")) == "zebra"
+        zebra = Word("zebra")
+        zelda = Word("zelda")
+        xor = zebra.packed ^ zelda.packed
+        print(f"\n{zebra.packed:010x}")
+        print(f"{xor:010x}")
+        assert xor == 0xe1600
 
 
 

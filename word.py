@@ -27,29 +27,12 @@ class Word:
         # word:     abcde
         # solution: ecbdx
         # score:    01121
-        answer = [0, 0, 0,0, 0]
-        available_letters = list(solution.word)  # cannot cache this, we destroy it
-        for i in range(5):
-        # for i, w, s in zip(range(5), self.word, solution.word):
-            if self.word[i] == solution.word[i]:
-                answer[i] = 2
-                available_letters[i] = 0
-        for i in range(5):
-        # for i, w in zip(range(5), self.word):
-            if answer[i] != 2:
-                if (w := self.word[i]) in available_letters:
-                    answer[i] = 1
-                    available_letters[available_letters.index(w)] = 0
-        return answer[4] + 10*(answer[3] + 10*(answer[2] + 10*(answer[1] + 10*answer[0])))
-        # return reduce(lambda product, factor: 10 * product + factor, answer)
-
-    def score1(self, solution):
         answer = [0, 0, 0, 0, 0]
         guess = self.word
-        solution = solution.word
-        available_letters = list(solution)  # cannot cache this, we destroy it
+        soln = solution.word
+        available_letters = list(soln)  # cannot cache this, we destroy it
         for i in range(5):
-            if guess[i] == solution[i]:
+            if guess[i] == soln[i]:
                 answer[i] = 2
                 available_letters[i] = 0
         for i in range(5):
@@ -58,6 +41,42 @@ class Word:
                     answer[i] = 1
                     available_letters[available_letters.index(w)] = 0
         return answer[4] + 10*(answer[3] + 10*(answer[2] + 10*(answer[1] + 10*answer[0])))
+        # return reduce(lambda product, factor: 10 * product + factor, answer)
+
+    def score1(self, solution):
+        answer = [0, 0, 0, 0, 0]
+        guess = self.word
+        soln = solution.word
+        # print(f"\n{guess}\n{soln}")
+        available_letters = list(soln)  # cannot cache this, we destroy it
+        xor = self.packed ^ solution.packed
+        mask = 0xFF
+        score = 0
+        for i in range(5):
+            if not (xor & mask):
+                score = score | (0x0202020202 & mask)
+                available_letters[i] = 0
+            mask = mask << 8
+        mask = 0xFF
+        for i in range(5):
+            # print(i, 4-i, guess)
+            w = guess[4-i]
+            # print(f"considering i {i}: {w} xor {xor:010x} mask {mask:010x} = {xor&mask:010x}")
+            if xor & mask:
+                if w in available_letters:
+                    # print("present")
+                    score = score | (0x0101010101 & mask)
+                    available_letters[available_letters.index(w)] = 0
+                else:
+                    # print("not present")
+                    pass
+            else:
+                # print("masked")
+                pass
+            mask = mask << 8
+        # print(f"score {score:010x}")
+        return 2002
+        # return answer[4] + 10*(answer[3] + 10*(answer[2] + 10*(answer[1] + 10*answer[0])))
         # return answer[4] + 10*(answer[3] + 10*(answer[2] + 10*(answer[1] + 10*answer[0])))
         # return reduce(lambda product, factor: 10 * product + factor, answer)
 
@@ -70,14 +89,14 @@ class Word:
     def encode(string):
         code = 0
         for c in string:
-            code = (code << 5) + ord(c) - ord("a")
+            code = (code << 8) + ord(c)
         return code
 
     @staticmethod
     def decode(number):
         string = ""
         for i in range(5):
-            string = chr((number & 0x1F) + ord("a")) + string
-            number = number >> 5
+            string = chr(number & 0xFF) + string
+            number = number >> 8
         return string
 
