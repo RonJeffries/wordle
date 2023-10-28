@@ -291,4 +291,9 @@ class TestWords:
         print(f"\nscore1 {new_delta}, score {current_delta} = {current_delta / new_delta:.3f}")
         assert False
 
+    def test_five_bit_code(self):
+        print(f"{(0x1F << 20):x}")
+        assert Word.decode(Word.encode("zebra")) == "zebra"
+
+
 
