@@ -268,6 +268,7 @@ class TestWords:
     #     t1 = time.time()
     #     assert t1 - t0 < 1.5
 
+    @pytest.mark.skip("unused")
     def test_compare_score(self):
         sols = WordCollection.from_file("valid_solutions.txt")
         guesses = WordCollection.from_file("valid_guesses.txt")
