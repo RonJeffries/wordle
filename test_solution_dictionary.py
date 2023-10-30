@@ -2,7 +2,7 @@ import time
 
 import pytest
 
-from scored_words import ScoredWords
+from score_description import ScoreDescription
 from solution_dictionary import SolutionDictionary, Statistic
 from word import Word
 from word_collection import WordCollection
@@ -25,7 +25,7 @@ class TestSolutionDictionary:
         score = guess.score(solution)
         assert score == 100
         solutions = solution_dict.solutions_for(guess, score)
-        expected = ScoredWords.from_strings(score,"frail", "grasp", "rival" )
+        expected = ScoreDescription.from_strings(score, "frail", "grasp", "rival")
         assert solutions == expected
 
     @pytest.mark.skip("30 seconds is too long")
@@ -50,9 +50,10 @@ class TestSolutionDictionary:
         stat = stats[0]
         assert stat.number_of_buckets == 15
         assert stat.max_words == 3
+        # assert False
 
     def test_drive_out_scored_words(self):
-        scored = ScoredWords(10101)
+        scored = ScoreDescription(10101)
         assert scored.score == 10101
         assert not scored.words
         scored.add_word(Word("abcde"))

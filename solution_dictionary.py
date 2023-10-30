@@ -1,4 +1,4 @@
-from scored_words import ScoredWords
+from score_description import ScoreDescription
 
 
 class Statistic:
@@ -19,6 +19,33 @@ class Statistic:
         return "\nWord  Buckets Min   Avg   Max"
 
 
+class GuessDescription:
+    def __init__(self):
+        self.score_descriptions = {}
+
+    def add_word(self, score, solution):
+        try:
+            description = self.score_descriptions[score]
+        except KeyError:
+            description = ScoreDescription(score)
+            self.score_descriptions[score] = description
+        description.add_word(solution)
+
+    @property
+    def buckets(self):
+        return self.score_descriptions.values()
+
+    @property
+    def number_of_buckets(self):
+        return len(self.score_descriptions)
+
+    def solutions_for(self, score):
+        try:
+            return self.score_descriptions[score]
+        except KeyError:
+            return ScoreDescription(score)
+
+
 class SolutionDictionary:
     def __init__(self, guesses, solutions):
         self.dict = self.create_dict(guesses, solutions)
@@ -27,24 +54,22 @@ class SolutionDictionary:
     def create_dict(guesses, solutions):
         solutions_dict = {}  # guess -> dict (score -> [solutions])
         for guess in guesses:
-            guess_dict = {}  # score -> [solutions]
-            solutions_dict[guess] = guess_dict
+            guess_desc = GuessDescription()
+            solutions_dict[guess] = guess_desc
             for solution in solutions:
                 score = guess.score(solution)
-                if not score in guess_dict:
-                    guess_dict[score] = ScoredWords(score)
-                guess_dict[score].add_word(solution)
+                guess_desc.add_word(score, solution)
         return solutions_dict
 
     def create_statistics(self):
         stats = []
         for word in self.dict:
-            word_dict = self.dict[word]  # {score -> scoredWords}
+            guess_description = self.dict[word]  # {score -> scoredWords}
             
-            number_of_buckets = len(word_dict)
-            max_words = max(len(bucket) for bucket in word_dict.values())
-            min_words = min(len(bucket) for bucket in word_dict.values())
-            avg_words = sum(len(bucket) for bucket in word_dict.values()) / number_of_buckets
+            number_of_buckets = guess_description.number_of_buckets
+            max_words = max(len(bucket) for bucket in guess_description.buckets)
+            min_words = min(len(bucket) for bucket in guess_description.buckets)
+            avg_words = sum(len(bucket) for bucket in guess_description.buckets) / number_of_buckets
             stat = Statistic(word, number_of_buckets, max_words, min_words, avg_words)
             stats.append(stat)
 
@@ -55,7 +80,5 @@ class SolutionDictionary:
         return stats
 
     def solutions_for(self, guess, score):
-        try:
-            return self.dict[guess][score]
-        except KeyError:
-            return []
+        guess_description = self.dict[guess]
+        return guess_description.solutions_for(score)

@@ -2,7 +2,7 @@ from word import Word
 from word_collection import WordCollection
 
 
-class ScoredWords:
+class ScoreDescription:
     def __init__(self, score, words=None):
         self.score = score
         if words:
