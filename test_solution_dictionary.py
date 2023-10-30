@@ -2,6 +2,7 @@ import time
 
 import pytest
 
+from scored_words import ScoredWords
 from solution_dictionary import SolutionDictionary
 from word import Word
 from word_collection import WordCollection
@@ -46,7 +47,12 @@ class TestSolutionDictionary:
         for stat in stats:
             print(stat)
         stat = stats[0]
-        assert stat.number_of_buckets == 100
+        assert stat.number_of_buckets == 15
+
+    def test_drive_out_scored_words(self):
+        scored = ScoredWords(10101)
+        assert scored.score == 10101
+        assert not scored.words
 
 
 
