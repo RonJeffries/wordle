@@ -21,6 +21,12 @@ class ScoredWords:
     def __eq__(self, other):
         return self.score == other.score and self._matches(other)
 
+    def __iter__(self):
+        return iter(self.words)
+
+    def __len__(self):
+        return len(self.words)
+
     def _matches(self, other):
         my_words = set(self.words.words)
         his_words = set(other.words.words)

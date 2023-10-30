@@ -2,12 +2,21 @@ from scored_words import ScoredWords
 
 
 class Statistic:
-    def __init__(self, word, buckets):
+    def __init__(self, word, number_of_buckets, max_words, min_words, avg_words):
         self.word = word
-        self.number_of_buckets = buckets
+        self.number_of_buckets = number_of_buckets
+        self.max_words = max_words
+        self.min_words = min_words
+        self.avg_words = avg_words
 
     def __repr__(self):
-        return f"S('{self.word.word}' buckets: {self.number_of_buckets:3d}"
+        return (f"{self.word.word} {self.number_of_buckets:4d} {self.min_words:5d} "
+                f"{self.avg_words:7.2f}{self.max_words:5d}")
+
+    @classmethod
+    @property
+    def header(cls):
+        return "\nWord  Buckets Min   Avg   Max"
 
 
 class SolutionDictionary:
@@ -30,8 +39,13 @@ class SolutionDictionary:
     def create_statistics(self):
         stats = []
         for word in self.dict:
-            word_dict = self.dict[word]
-            stat = Statistic(word, len(word_dict))
+            word_dict = self.dict[word]  # {score -> scoredWords}
+            
+            number_of_buckets = len(word_dict)
+            max_words = max(len(bucket) for bucket in word_dict.values())
+            min_words = min(len(bucket) for bucket in word_dict.values())
+            avg_words = sum(len(bucket) for bucket in word_dict.values()) / number_of_buckets
+            stat = Statistic(word, number_of_buckets, max_words, min_words, avg_words)
             stats.append(stat)
 
         def my_key(stat: Statistic):

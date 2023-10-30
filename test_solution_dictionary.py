@@ -3,7 +3,7 @@ import time
 import pytest
 
 from scored_words import ScoredWords
-from solution_dictionary import SolutionDictionary
+from solution_dictionary import SolutionDictionary, Statistic
 from word import Word
 from word_collection import WordCollection
 
@@ -44,11 +44,12 @@ class TestSolutionDictionary:
         solutions = all_solutions.words[0:2000:100]
         sd = SolutionDictionary(guesses, solutions)
         stats = sd.create_statistics()
-        print()
+        print(Statistic.header)
         for stat in stats:
             print(stat)
         stat = stats[0]
         assert stat.number_of_buckets == 15
+        assert stat.max_words == 30
 
     def test_drive_out_scored_words(self):
         scored = ScoredWords(10101)
