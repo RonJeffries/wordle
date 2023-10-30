@@ -35,6 +35,19 @@ class TestSolutionDictionary:
         delta_time = time.time() - t0
         assert delta_time < 45  # really about 30 seconds
 
+    def test_easy_statistics(self):
+        all_guesses = WordCollection.from_file("valid_combined.txt")
+        guesses = all_guesses.words[0:10000:500]
+        all_solutions = WordCollection.from_file("valid_solutions.txt")
+        solutions = all_solutions.words[0:2000:100]
+        sd = SolutionDictionary(guesses, solutions)
+        stats = sd.create_statistics()
+        print()
+        for stat in stats:
+            print(stat)
+        stat = stats[0]
+        assert stat.number_of_buckets == 100
+
 
 
 
