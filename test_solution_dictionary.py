@@ -53,6 +53,9 @@ class TestSolutionDictionary:
         scored = ScoredWords(10101)
         assert scored.score == 10101
         assert not scored.words
+        scored.add_word(Word("abcde"))
+        scored.add_word(Word("fghij"))
+        assert len(scored.words) == 2
 
 
 
