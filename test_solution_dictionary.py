@@ -49,7 +49,7 @@ class TestSolutionDictionary:
             print(stat)
         stat = stats[0]
         assert stat.number_of_buckets == 15
-        assert stat.max_words == 30
+        assert stat.max_words == 3
 
     def test_drive_out_scored_words(self):
         scored = ScoredWords(10101)
