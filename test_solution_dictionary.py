@@ -25,7 +25,8 @@ class TestSolutionDictionary:
         score = guess.score(solution)
         assert score == 100
         solutions = solution_dict.solutions_for(guess, score)
-        assert solutions == [Word("frail"), Word("grasp"), Word("rival")]
+        expected = ScoredWords.from_strings(score,"frail", "grasp", "rival" )
+        assert solutions == expected
 
     @pytest.mark.skip("30 seconds is too long")
     def test_full_timing(self):

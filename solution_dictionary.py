@@ -1,3 +1,5 @@
+from scored_words import ScoredWords
+
 
 class Statistic:
     def __init__(self, word, buckets):
@@ -21,8 +23,8 @@ class SolutionDictionary:
             for solution in solutions:
                 score = guess.score(solution)
                 if not score in guess_dict:
-                    guess_dict[score] = []
-                guess_dict[score].append(solution)
+                    guess_dict[score] = ScoredWords(score)
+                guess_dict[score].add_word(solution)
         return solutions_dict
 
     def create_statistics(self):

@@ -13,6 +13,11 @@ class WordCollection:
                 result.append(Word(word))
         return result
 
+    @classmethod
+    def from_strings(cls, *strings):
+        words = [Word(string) for string in strings]
+        return cls(words)
+
     def __init__(self, words=None):
         if words:
             self.words = words
