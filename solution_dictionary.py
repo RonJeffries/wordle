@@ -1,3 +1,5 @@
+from itertools import repeat
+
 from score_description import ScoreDescription
 
 
@@ -51,16 +53,11 @@ class SolutionDictionary:
     def __init__(self, guesses, solutions):
         self.dict = self.create_dict(guesses, solutions)
 
-    @staticmethod
-    def create_dict(guesses, solutions):
-        solutions_dict = {}  # guess -> dict (score -> [solutions])
-        for guess in guesses:
-            guess_desc = SolutionDictionary.guess_description(guess, solutions)
-            solutions_dict[guess] = guess_desc
-        return solutions_dict
+    def create_dict(self, guesses, solutions):
+        guess_descriptions = map(self.guess_description, guesses, repeat(solutions))
+        return {desc.guess_word: desc for desc in guess_descriptions}
 
-    @staticmethod
-    def guess_description(guess, solutions):
+    def guess_description(self, guess, solutions):
         guess_desc = GuessDescription(guess)
         for solution in solutions:
             score = guess.score(solution)

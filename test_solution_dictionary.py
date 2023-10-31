@@ -28,14 +28,16 @@ class TestSolutionDictionary:
         expected = ScoreDescription.from_strings(score, "frail", "grasp", "rival")
         assert solutions == expected
 
-    @pytest.mark.skip("30 seconds is too long")
+    # @pytest.mark.skip("30 seconds is too long")
     def test_full_timing(self):
         all_guesses = WordCollection.from_file("valid_combined.txt")
         all_solutions = WordCollection.from_file("valid_solutions.txt")
         t0 = time.time()
         dict = SolutionDictionary(all_guesses, all_solutions)
         delta_time = time.time() - t0
+        print(delta_time)
         assert delta_time < 45  # really about 30 seconds
+        assert False
 
     def test_easy_statistics(self):
         all_guesses = WordCollection.from_file("valid_combined.txt")
