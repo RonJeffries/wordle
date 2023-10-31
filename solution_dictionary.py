@@ -20,7 +20,8 @@ class Statistic:
 
 
 class GuessDescription:
-    def __init__(self):
+    def __init__(self, guess_word):
+        self.guess_word = guess_word
         self.score_descriptions = {}
 
     def add_word(self, score, solution):
@@ -54,12 +55,17 @@ class SolutionDictionary:
     def create_dict(guesses, solutions):
         solutions_dict = {}  # guess -> dict (score -> [solutions])
         for guess in guesses:
-            guess_desc = GuessDescription()
+            guess_desc = SolutionDictionary.guess_description(guess, solutions)
             solutions_dict[guess] = guess_desc
-            for solution in solutions:
-                score = guess.score(solution)
-                guess_desc.add_word(score, solution)
         return solutions_dict
+
+    @staticmethod
+    def guess_description(guess, solutions):
+        guess_desc = GuessDescription(guess)
+        for solution in solutions:
+            score = guess.score(solution)
+            guess_desc.add_word(score, solution)
+        return guess_desc
 
     def create_statistics(self):
         stats = []
