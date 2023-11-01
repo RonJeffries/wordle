@@ -79,3 +79,43 @@ class TestSpeed:
         delta_time = time.time() - t0
         assert count == 112
         assert delta_time < 5
+
+    def test_iterator_once_only(self):
+        result = map(lambda i: i*2,  range(3))
+        vals = list(result)
+        assert vals == [0, 2, 4]
+        again = list(result)
+        assert again == []
+
+    def func(self, r):
+        return 2*r
+
+    def test_parallel_range(self):
+        r = range(8)
+        with ProcessPoolExecutor(8) as exec:
+            parallel_results = exec.map(self.func, r)
+        parallel_list = list(parallel_results)
+        serial_results = map(self.func, r)
+        serial_list = list(serial_results)
+        expected_list = [0, 2, 4, 6, 8, 10, 12, 14]
+        assert serial_list == parallel_list
+        assert parallel_list == expected_list
+
+    def process_chunk(self, guesses):
+        return map(lambda g: g+":yes", guesses)
+
+    def do_chunk(self, chunk):
+        guesses = ["a", "b", "c", "d", "e", "f", "g", "h"]
+        begin = chunk[0]
+        end = begin + chunk[1]
+        s = slice(begin, end)
+        items = guesses[s]
+        return self.process_chunk(items)
+
+    def test_parallel_chunker(self):
+        chunks = [(0, 2), (2, 2), (4, 2), (6, 2)]
+        result = map(self.do_chunk, chunks)
+        expected = [x+":yes" for x in "abcdefgh"]
+        results = [item for sublist in result for item in sublist]
+        assert results == expected
+

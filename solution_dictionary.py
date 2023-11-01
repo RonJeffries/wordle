@@ -1,4 +1,6 @@
+from concurrent.futures import ProcessPoolExecutor
 from itertools import repeat
+from math import ceil
 
 from score_description import ScoreDescription
 
@@ -22,9 +24,12 @@ class Statistic:
 
 
 class GuessDescription:
-    def __init__(self, guess_word):
+    def __init__(self, guess_word, solutions):
         self.guess_word = guess_word
         self.score_descriptions = {}
+        for solution in solutions:
+            score = guess_word.score(solution)
+            self.add_word(score, solution)
 
     def add_word(self, score, solution):
         try:
@@ -51,18 +56,23 @@ class GuessDescription:
 
 class SolutionDictionary:
     def __init__(self, guesses, solutions):
-        self.dict = self.create_dict(guesses, solutions)
+        self.dict = self.create_dict(guesses, solutions, False)
 
-    def create_dict(self, guesses, solutions):
-        guess_descriptions = map(self.guess_description, guesses, repeat(solutions))
+    def append(self, other):
+        for k,v in other.dict.items():
+            self.dict[k] = v
+
+    def create_dict(self, guesses, solutions, concurrent=False):
+        if concurrent:
+            with ProcessPoolExecutor(8) as executor:
+                # chunk_size = ceil(len(guesses)/8)
+                guess_descriptions = executor.map(self.guess_description, guesses, repeat(solutions), chunksize=500)
+        else:
+            guess_descriptions = map(self.guess_description, guesses, repeat(solutions))
         return {desc.guess_word: desc for desc in guess_descriptions}
 
     def guess_description(self, guess, solutions):
-        guess_desc = GuessDescription(guess)
-        for solution in solutions:
-            score = guess.score(solution)
-            guess_desc.add_word(score, solution)
-        return guess_desc
+        return GuessDescription(guess, solutions)
 
     def create_statistics(self):
         stats = []

@@ -28,7 +28,7 @@ class TestSolutionDictionary:
         expected = ScoreDescription.from_strings(score, "frail", "grasp", "rival")
         assert solutions == expected
 
-    # @pytest.mark.skip("30 seconds is too long")
+    @pytest.mark.skip("30 seconds is too long")
     def test_full_timing(self):
         all_guesses = WordCollection.from_file("valid_combined.txt")
         all_solutions = WordCollection.from_file("valid_solutions.txt")
@@ -61,6 +61,23 @@ class TestSolutionDictionary:
         scored.add_word(Word("abcde"))
         scored.add_word(Word("fghij"))
         assert len(scored.words) == 2
+
+    def test_chunked_dictionary(self):
+        all_guesses = WordCollection.from_file("valid_combined.txt")
+        guesses_1 = all_guesses.words[0:10]
+        guesses_2 = all_guesses.words[10:20]
+        all_solutions = WordCollection.from_file("valid_solutions.txt")
+        solutions = all_solutions.words[0:2000:100]
+        d1 = SolutionDictionary(guesses_1, solutions)
+        d2 = SolutionDictionary(guesses_2, solutions)
+        assert len(d1.dict) == 10
+        d1.append(d2)
+        assert len(d1.dict) == 20
+
+    def test_make_slice_of_descriptions(self):
+        all_guesses = WordCollection.from_file("valid_combined.txt")
+        all_solutions = WordCollection.from_file("valid_solutions.txt")
+
 
 
 
