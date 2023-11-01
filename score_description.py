@@ -27,6 +27,9 @@ class ScoreDescription:
     def __len__(self):
         return len(self.words)
 
+    def __repr__(self):
+        return f"ScoreDescription({self.score}:\n..{self.words.words}"
+
     def _matches(self, other):
         my_words = set(self.words.words)
         his_words = set(other.words.words)

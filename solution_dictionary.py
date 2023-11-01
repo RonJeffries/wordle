@@ -32,6 +32,9 @@ class GuessDescription:
             score = guess_word.score(solution)
             self.classify_word(score, solution)
 
+    def __repr__(self):
+        return f"GD({self.guess_word.word}:\n  {self.score_descriptions}"
+
     def classify_word(self, score, solution):
         try:
             description = self.score_descriptions[score]
@@ -59,15 +62,28 @@ class SolutionDictionary:
     def __init__(self, guesses: WordCollection, solutions: WordCollection):
         assert isinstance(guesses, WordCollection)
         assert isinstance(solutions, WordCollection)
-        self.dict = self.create_dict(guesses, solutions)
+        self.dict = {}
+        self.merge_dict(guesses, solutions)
+
+    def __repr__(self):
+        return f"SD{self.dict}"
+
+    @classmethod
+    def from_slices(cls, solutions, *guess_slices):
+        none = WordCollection()
+        instance = cls(none, none)
+        for guesses in guess_slices:
+            instance.merge_dict(guesses, solutions)
+        return instance
+
+    def merge_dict(self, guesses, solutions):
+        guess_descriptions = map(self.guess_description, guesses, repeat(solutions))
+        for description in guess_descriptions:
+            self.dict[description.guess_word] = description
 
     def append(self, other_solution_dictionary):
         for k,v in other_solution_dictionary.dict.items():
             self.dict[k] = v
-
-    def create_dict(self, guesses, solutions):
-        guess_descriptions = map(self.guess_description, guesses, repeat(solutions))
-        return {desc.guess_word: desc for desc in guess_descriptions}
 
     def guess_description(self, guess, solutions):
         return GuessDescription(guess, solutions)

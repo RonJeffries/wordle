@@ -75,10 +75,22 @@ class TestSolutionDictionary:
         d1.append(d2)
         assert len(d1.dict) == 20
 
-    def test_make_slice_of_descriptions(self):
+    def test_from_slices(self):
         all_guesses = WordCollection.from_file("valid_combined.txt")
-        guesses_1 = all
+        guesses_1 = all_guesses[0:10]
+        guesses_2 = all_guesses[10:20]
+        print(guesses_2)
         all_solutions = WordCollection.from_file("valid_solutions.txt")
+        solutions = all_solutions[0:10]
+        sd = SolutionDictionary.from_slices(solutions, guesses_1, guesses_2)
+        gd = sd.solutions_for(Word("aahed"), 20000)
+        sols = gd.words
+        expected = WordCollection.from_strings("abbot", "abort")
+        assert sols == expected
+        gd = sd.solutions_for(Word("abate"), 22001)
+        sols = gd.words
+        expected = WordCollection.from_strings("abbey", "abled")
+        assert sols == expected
 
 
 

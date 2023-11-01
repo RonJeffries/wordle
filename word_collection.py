@@ -24,11 +24,17 @@ class WordCollection:
         else:
             self.words = []
 
+    def __eq__(self, other):
+        return self.words == other.words
+
     def __getitem__(self, item):
         if isinstance(item, slice):
             return WordCollection(self.words[item])
         else:
             return self.words[item]
+
+    def __repr__(self):
+        return repr(self.words)
 
     def __iter__(self):
         return iter(self.words)
