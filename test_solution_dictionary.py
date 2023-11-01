@@ -13,10 +13,11 @@ class TestSolutionDictionary:
     def test_solution_dictionary(self):
         all_guesses = WordCollection.from_file("valid_combined.txt")
         all_solutions = WordCollection.from_file("valid_solutions.txt")
-        guesses = all_guesses.words[0:10000:500]
+        guesses = all_guesses[0:10000:500]
+        assert isinstance(guesses, WordCollection)
         assert len(guesses) <= 20
         assert Word("berth") in guesses
-        solutions = all_solutions.words[0:2000:100]
+        solutions = all_solutions[0:2000:100]
         assert len(solutions) <= 20
         assert Word("frail") in solutions
         solution_dict = SolutionDictionary(guesses, solutions)
@@ -41,9 +42,9 @@ class TestSolutionDictionary:
 
     def test_easy_statistics(self):
         all_guesses = WordCollection.from_file("valid_combined.txt")
-        guesses = all_guesses.words[0:10000:500]
+        guesses = all_guesses[0:10000:500]
         all_solutions = WordCollection.from_file("valid_solutions.txt")
-        solutions = all_solutions.words[0:2000:100]
+        solutions = all_solutions[0:2000:100]
         sd = SolutionDictionary(guesses, solutions)
         stats = sd.create_statistics()
         print(Statistic.header)
@@ -64,10 +65,10 @@ class TestSolutionDictionary:
 
     def test_chunked_dictionary(self):
         all_guesses = WordCollection.from_file("valid_combined.txt")
-        guesses_1 = all_guesses.words[0:10]
-        guesses_2 = all_guesses.words[10:20]
+        guesses_1 = all_guesses[0:10]
+        guesses_2 = all_guesses[10:20]
         all_solutions = WordCollection.from_file("valid_solutions.txt")
-        solutions = all_solutions.words[0:2000:100]
+        solutions = all_solutions[0:2000:100]
         d1 = SolutionDictionary(guesses_1, solutions)
         d2 = SolutionDictionary(guesses_2, solutions)
         assert len(d1.dict) == 10
@@ -76,6 +77,7 @@ class TestSolutionDictionary:
 
     def test_make_slice_of_descriptions(self):
         all_guesses = WordCollection.from_file("valid_combined.txt")
+        guesses_1 = all
         all_solutions = WordCollection.from_file("valid_solutions.txt")
 
 

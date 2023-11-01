@@ -3,6 +3,7 @@ from itertools import repeat
 from math import ceil
 
 from score_description import ScoreDescription
+from word_collection import WordCollection
 
 
 class Statistic:
@@ -55,11 +56,13 @@ class GuessDescription:
 
 
 class SolutionDictionary:
-    def __init__(self, guesses, solutions):
+    def __init__(self, guesses: WordCollection, solutions: WordCollection):
+        assert isinstance(guesses, WordCollection)
+        assert isinstance(solutions, WordCollection)
         self.dict = self.create_dict(guesses, solutions)
 
-    def append(self, other):
-        for k,v in other.dict.items():
+    def append(self, other_solution_dictionary):
+        for k,v in other_solution_dictionary.dict.items():
             self.dict[k] = v
 
     def create_dict(self, guesses, solutions):
