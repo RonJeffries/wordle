@@ -3,17 +3,17 @@ from word_collection import WordCollection
 
 
 class ScoreDescription:
-    def __init__(self, score, words=None):
+    def __init__(self, score):
         self.score = score
-        if words:
-            self.words = words
-        else:
-            self.words = WordCollection()
+        self.words = WordCollection()
 
     @classmethod
     def from_strings(cls, score, *strings):
         words = WordCollection.from_strings(*strings)
-        return cls(score, words)
+        instance = cls(score)
+        for word in words:
+            instance.add_word(word)
+        return instance
 
     def add_word(self, word: Word):
         self.words.append(word)
