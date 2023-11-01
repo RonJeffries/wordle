@@ -29,9 +29,9 @@ class GuessDescription:
         self.score_descriptions = {}
         for solution in solutions:
             score = guess_word.score(solution)
-            self.add_word(score, solution)
+            self.classify_word(score, solution)
 
-    def add_word(self, score, solution):
+    def classify_word(self, score, solution):
         try:
             description = self.score_descriptions[score]
         except KeyError:
@@ -56,19 +56,14 @@ class GuessDescription:
 
 class SolutionDictionary:
     def __init__(self, guesses, solutions):
-        self.dict = self.create_dict(guesses, solutions, False)
+        self.dict = self.create_dict(guesses, solutions)
 
     def append(self, other):
         for k,v in other.dict.items():
             self.dict[k] = v
 
-    def create_dict(self, guesses, solutions, concurrent=False):
-        if concurrent:
-            with ProcessPoolExecutor(8) as executor:
-                # chunk_size = ceil(len(guesses)/8)
-                guess_descriptions = executor.map(self.guess_description, guesses, repeat(solutions), chunksize=500)
-        else:
-            guess_descriptions = map(self.guess_description, guesses, repeat(solutions))
+    def create_dict(self, guesses, solutions):
+        guess_descriptions = map(self.guess_description, guesses, repeat(solutions))
         return {desc.guess_word: desc for desc in guess_descriptions}
 
     def guess_description(self, guess, solutions):
