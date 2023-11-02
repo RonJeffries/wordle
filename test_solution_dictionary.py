@@ -1,3 +1,4 @@
+import pickle
 import time
 
 import pytest
@@ -91,6 +92,36 @@ class TestSolutionDictionary:
         sols = gd.words
         expected = WordCollection.from_strings("abbey", "abled")
         assert sols == expected
+
+    # def test_write_file(self):
+    #     with open("/users/ron/Desktop/scratch.txt", "w") as scratch:
+    #         scratch.writelines(["hello\n", "world\n"])
+
+    @pytest.mark.skip("working on it")
+    def test_pickling_and_unpickling(self):
+        all_guesses = WordCollection.from_file("valid_combined.txt")
+        all_solutions = WordCollection.from_file("valid_solutions.txt")
+        guesses = all_guesses[0:10000:500]
+        solutions = all_solutions[0:2000:100]
+        solution_dict = SolutionDictionary(guesses, solutions)
+        t0 = time.time()
+        with open("/users/ron/Desktop/test.pcl", "wb") as pick:
+            pickle.dump(solution_dict, pick)
+        t1 = time.time()
+        t_write = t1 - t0
+        with open("/users/ron/Desktop/test.pcl", "rb") as pick:
+            unpickled = pickle.load(pick)
+        t_read = time.time() - t1
+        print(f"Pickle: {t_write:.5f}, Unpickle: {t_read:.5f}")
+        guess = Word("berth")
+        solution = Word("frail")
+        score = guess.score(solution)
+        assert score == 100
+        solutions = unpickled.solutions_for(guess, score)
+        expected = ScoreDescription.from_strings(score, "frail", "grasp", "rival")
+        assert solutions == expected
+        assert False
+
 
 
 
