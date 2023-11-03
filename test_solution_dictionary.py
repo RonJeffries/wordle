@@ -31,14 +31,28 @@ class TestSolutionDictionary:
         assert solutions == expected
 
     @pytest.mark.skip("30 seconds is too long")
-    def test_full_timing(self):
+    def test_full_timing_and_create_file(self):
         all_guesses = WordCollection.from_file("valid_combined.txt")
         all_solutions = WordCollection.from_file("valid_solutions.txt")
         t0 = time.time()
         dict = SolutionDictionary(all_guesses, all_solutions)
-        delta_time = time.time() - t0
-        print(delta_time)
-        assert delta_time < 45  # really about 30 seconds
+        t1 = time.time()
+        build_time = t1 - t0
+        with open("/users/ron/Desktop/SD.pcl", "wb") as pick:
+            pickle.dump(dict, pick)
+        save_time = time.time() - t1
+        print(f"build: {build_time:.3f}, save: {save_time:.3f}")
+        # build: 32.641, save: 3.253
+        assert False
+
+    @pytest.mark.skip("3.5 seconds is too long")
+    def test_file_read_time(self):
+        t0 = time.time()
+        with open("/users/ron/Desktop/SD.pcl", "rb") as pick:
+            dict = pickle.load(pick)
+        t1 = time.time()
+        print(f"load time: {t1-t0:.3f}")
+        # load time: 3.553
         assert False
 
     def test_easy_statistics(self):
