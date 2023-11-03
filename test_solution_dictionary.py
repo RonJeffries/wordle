@@ -70,6 +70,19 @@ class TestSolutionDictionary:
         assert stat.max_words == 3
         # assert False
 
+    @pytest.mark.skip("working")
+    def test_statistics(self):
+        with open("/users/ron/Desktop/SD.pcl", "rb") as pick:
+            sd = pickle.load(pick)
+        stats = sd.create_statistics()
+        print(Statistic.header)
+        for stat in stats[0:20]:
+            print(stat)
+        print("...")
+        for stat in stats[-10:]:
+            print(stat)
+        assert False
+
     def test_drive_out_scored_words(self):
         scored = ScoreDescription(10101)
         assert scored.score == 10101

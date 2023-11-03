@@ -34,3 +34,6 @@ class ScoreDescription:
         my_words = set(self.words.words)
         his_words = set(other.words.words)
         return my_words == his_words
+
+    def probability(self, total):
+        return len(self.words)/total
