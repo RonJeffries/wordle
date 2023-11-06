@@ -62,7 +62,7 @@ class TestSolutionDictionary:
         solutions = all_solutions[0:2000:100]
         sd = SolutionDictionary(guesses, solutions)
         stats = sd.create_statistics()
-        print(Statistic.header)
+        print(Statistic.header())
         for stat in stats:
             print(stat)
         stat = stats[0]
@@ -75,7 +75,7 @@ class TestSolutionDictionary:
         with open("/users/ron/Desktop/SD.pcl", "rb") as pick:
             sd = pickle.load(pick)
         stats = sd.create_statistics()
-        print(Statistic.header)
+        print(Statistic.header())
         for stat in stats[0:20]:
             print(stat)
         print("...")

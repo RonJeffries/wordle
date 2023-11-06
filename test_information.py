@@ -68,8 +68,8 @@ class TestInformation:
         collection_of_all_guess_words = WordCollection.from_file("valid_combined.txt").words
         guesses = [guess.word for guess in collection_of_all_guess_words]
         t0 = time.time()
-        with ProcessPoolExecutor(8) as exec:
-            unordered = exec.map(expected_information, guesses, repeat(solutions))
+        with ProcessPoolExecutor(8) as executor:
+            unordered = executor.map(expected_information, guesses, repeat(solutions))
         ordered = sorted(unordered, key=lambda pair: pair[1], reverse=True)
         print(time.time() - t0)
         print(ordered[0:10])
@@ -91,6 +91,7 @@ class TestInformation:
         print(time.time() - t0)
         # assert False
 
+
 def expected_information(guess, solutions):
     buckets = {}
     total = len(solutions)
@@ -102,7 +103,7 @@ def expected_information(guess, solutions):
             buckets[score] = 1
     info = 0
     for count in buckets.values():
-        probability =count /total
+        probability = count / total
         info += probability*log2(1/probability)
     return guess, info
 
@@ -122,6 +123,3 @@ def compute_score(guess, solution):
     return answer[4] + 10*(answer[3] + 10*(answer[2] + 10*(answer[1] + 10*answer[0])))
     # a0, a1, a2, a3, a4 = answer  # no improvement
     # return (a4 << 16) + (a3 << 12) + (a2 << 8) + (a1 << 4) + a0
-
-
-

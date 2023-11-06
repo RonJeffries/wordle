@@ -1,6 +1,5 @@
-from concurrent.futures import ProcessPoolExecutor
 from itertools import repeat
-from math import ceil, log2
+from math import log2
 
 from score_description import ScoreDescription
 from word_collection import WordCollection
@@ -20,7 +19,6 @@ class Statistic:
                 f"{self.avg_words:7.2f}{self.max_words:5d}")
 
     @classmethod
-    @property
     def header(cls):
         return "\nWord  Info  Buckets Min   Avg   Max"
 
@@ -49,10 +47,9 @@ class GuessDescription:
         total = 0
         for score_description in self.score_descriptions.values():
             probability = score_description.probability(self.solutions_count)
-            log = log2(1/probability)
-            total += probability*log
+            log = log2(1 / probability)
+            total += probability * log
         return total
-
 
     @property
     def buckets(self):
@@ -93,7 +90,7 @@ class SolutionDictionary:
             self.dict[description.guess_word] = description
 
     def append(self, other_solution_dictionary):
-        for k,v in other_solution_dictionary.dict.items():
+        for k, v in other_solution_dictionary.dict.items():
             self.dict[k] = v
 
     def guess_description(self, guess, solutions):
@@ -111,8 +108,8 @@ class SolutionDictionary:
             stat = Statistic(word, number_of_buckets, max_words, min_words, avg_words, expected_info)
             stats.append(stat)
 
-        def my_key(stat: Statistic):
-            return stat.expected_info
+        def my_key(statistic: Statistic):
+            return statistic.expected_info
 
         stats.sort(key=my_key, reverse=True)
         return stats
