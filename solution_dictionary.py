@@ -6,17 +6,25 @@ from word_collection import WordCollection
 
 
 class Statistic:
-    def __init__(self, word, number_of_buckets, max_words, min_words, avg_words, expected_info):
+    def __init__(self, word, number_of_buckets, max_words, min_words, avg_words, expected_info, guess_description):
         self.word = word
         self.number_of_buckets = number_of_buckets
         self.max_words = max_words
         self.min_words = min_words
         self.avg_words = avg_words
         self.expected_info = expected_info
+        self.guess_description = guess_description
+        self.singletons = [bucket for bucket in guess_description.buckets if len(bucket) == 1]
+        # singletons are ScoreDescriptions with a score and words. Each one has just one word.
+        self.words = [(singleton.score, word.word) for singleton in self.singletons for word in singleton.words]
+        self.singleton_count = len(self.singletons)
+
+    # def __repr__(self):
+    #     return f"{self.word.word} #singletons: {len(self.singletons)}"  # {self.words}"
 
     def __repr__(self):
         return (f"{self.word.word} {self.expected_info:5.2f} {self.number_of_buckets:4d} {self.min_words:5d} "
-                f"{self.avg_words:7.2f}{self.max_words:5d}")
+                f"{self.avg_words:7.2f}{self.max_words:5d} #singletons: {len(self.singletons)}")
 
     @classmethod
     def header(cls):
@@ -105,13 +113,13 @@ class SolutionDictionary:
             max_words = max(len(bucket) for bucket in guess_description.buckets)
             min_words = min(len(bucket) for bucket in guess_description.buckets)
             avg_words = sum(len(bucket) for bucket in guess_description.buckets) / number_of_buckets
-            stat = Statistic(word, number_of_buckets, max_words, min_words, avg_words, expected_info)
+            stat = Statistic(word, number_of_buckets, max_words, min_words, avg_words, expected_info, guess_description)
             stats.append(stat)
 
         def my_key(statistic: Statistic):
-            return statistic.expected_info
+            return statistic.singleton_count
 
-        stats.sort(key=my_key, reverse=True)
+        stats.sort(key=my_key, reverse=False)
         return stats
 
     def solutions_for(self, guess, score):

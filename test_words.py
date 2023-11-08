@@ -268,7 +268,7 @@ class TestWords:
     #     t1 = time.time()
     #     assert t1 - t0 < 1.5
 
-    @pytest.mark.skip("unused")
+    @pytest.mark.skip("only used when we get a new score idea")
     def test_compare_score(self):
         sols = WordCollection.from_file("valid_solutions.txt")
         guesses = WordCollection.from_file("valid_guesses.txt")
@@ -289,7 +289,7 @@ class TestWords:
             sc = guess.score1(solution)
         new_delta = round(time.time() - new_0 - loop_delta, 3)
         print(current_delta, new_delta)
-        print(f"\nscore1 {new_delta:.3f}, score {current_delta:.3f} = {current_delta / new_delta:.3f}")
+        print(f"\nscore1 {new_delta:.3f}, score {current_delta:.3f} = {new_delta / current_delta:.3f}")
         assert False
 
     def test_encode_decode(self):

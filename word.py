@@ -1,3 +1,4 @@
+from functools import reduce
 
 
 class Word:
@@ -57,7 +58,10 @@ class Word:
                     answer[i] = 1
                     available_letters[available_letters.index(w)] = 0
         return answer[4] + 10*(answer[3] + 10*(answer[2] + 10*(answer[1] + 10*answer[0])))
-        # return reduce(lambda product, factor: 10 * product + factor, answer)
+        # return reduce(lambda product, factor: 10 * product + factor, answer)  # 25% slower
+        # return answer[4] + (answer[3]<<4) + (answer[2]<<8) + (answer[1]<<12) + (answer[0]<<16)
+        # perhaps 3% faster and would require some tests to change.
+        # we need 10x faster and even then it'd be slow
 
     def to_eliminate(self, score: int):
         score_with_leading_zeros = f"{score:05}"
