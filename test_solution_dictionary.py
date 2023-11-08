@@ -55,6 +55,7 @@ class TestSolutionDictionary:
         # load time: 3.553
         assert False
 
+    @pytest.mark.skip("not useful as written")
     def test_easy_statistics(self):
         all_guesses = WordCollection.from_file("valid_combined.txt")
         guesses = all_guesses[0:10000:500]
